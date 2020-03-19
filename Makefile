@@ -5,7 +5,7 @@
 #################################################################################
 
 PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
-BUCKET = iarpa-focus/fair_skill/
+BUCKET = iarpa-focus/fair_skill
 PROFILE = default
 PROJECT_NAME = fair_skill
 PYTHON_INTERPRETER = python3
