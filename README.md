@@ -1,7 +1,7 @@
 fair_skill
 ==============================
 
-Metrics of forecasting accuracy in simulated worlds
+Plots of forecasting metrics for the FOCUS program
 
 Project Organization
 ------------
