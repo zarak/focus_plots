@@ -1,4 +1,4 @@
-fair_skill
+focus_plots
 ==============================
 
 Plots of forecasting metrics for the FOCUS program
