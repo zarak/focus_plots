@@ -1,8 +1,26 @@
 # -*- coding: utf-8 -*-
 import click
 import logging
+import pandas as pd
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
+
+
+FILE_NAME = 'uniform_date.csv'
+
+
+def preprocess(cycle3):
+    cycle3 = cycle3.drop(columns={'Unnamed: 0', 'Timestamp'})
+    cycle3 = cycle3.rename(columns={'Team.Name': 'TeamName'})
+    cycle3 = cycle3.drop_duplicates()
+    cycle3.loc[:,
+               'Uniform Date Format'
+               ] = pd.to_datetime(cycle3['Uniform Date Format'])
+    cycle3 = cycle3.query('FairSkill != "######"')
+    cycle3.loc[:, 'FairSkill'] = cycle3.FairSkill.astype(float)
+    cycle3 = cycle3.set_index("Uniform Date Format")
+    cycle3 = cycle3.sort_index()
+    return cycle3
 
 
 @click.command()
@@ -14,6 +32,9 @@ def main(input_filepath, output_filepath):
     """
     logger = logging.getLogger(__name__)
     logger.info('making final data set from raw data')
+    cycle3 = pd.read_csv(Path(input_filepath) / FILE_NAME)
+    cycle3 = preprocess(cycle3)
+    cycle3.to_csv(Path(output_filepath) / 'cycle3.csv', index=False)
 
 
 if __name__ == '__main__':
