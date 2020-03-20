@@ -29,3 +29,27 @@ def resample_KL(df):
         return merged.groupby(
             ['Question', 'Ordered.Bin.Number']
         ).apply(KL_divergence).mean()
+
+
+def resampled_teams(processed, resampling_period):
+    kiwi = processed.query(
+        "Question == @question & TeamName == 'Kiwi'"
+    ).resample(resampling_period).mean()
+    kiwi_marker_size = processed.query(
+        "Question == @question & TeamName == 'Kiwi'"
+    ).resample(resampling_period).count().Forecaster
+    kiwi_KL = processed.query(
+        "Question == @question & TeamName == 'Kiwi'"
+    ).resample(resampling_period).apply(resample_KL).values
+
+    mango = processed.query(
+        "Question == @question & TeamName == 'Mango'"
+    ).resample(resampling_period).mean()
+    mango_marker_size = processed.query(
+        "Question == @question & TeamName == 'Mango'"
+    ).resample(resampling_period).count().Forecaster
+    mango_KL = processed.query(
+        "Question == @question & TeamName == 'Mango'"
+    ).resample(resampling_period).apply(resample_KL).values
+
+    return kiwi, kiwi_KL, mango, mango_KL
