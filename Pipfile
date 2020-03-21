@@ -6,7 +6,7 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-src = {editable = true,file = "file:///Users/zarak/Research/fair_skill"}
+src = {editable = true,file = "file:///Users/zarak/Research/focus_plots"}
 click = "*"
 coverage = "*"
 awscli = "*"
@@ -17,6 +17,7 @@ pytest = "*"
 jupyter = "*"
 pandas = "*"
 numpy = "*"
+streamlit = "*"
 
 [requires]
 python_version = "3.8"
