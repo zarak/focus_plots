@@ -23,7 +23,7 @@ scoring_method = st.sidebar.radio(
     "Scoring Method",
     ['FairSkill', 'SWRPS'])
 
-fig = plot_divergence(processed, scoring_method, resampling_period)
+fig = plot_divergence(processed, scoring_method, resampling_period, question)
 st.plotly_chart(fig)
 
 # show_data = st.checkbox('Show raw data')

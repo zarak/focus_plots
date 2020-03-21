@@ -5,8 +5,8 @@ import seaborn as sns
 import streamlit as st
 import plotly.graph_objects as go
 import plotly.express as px
-from src.build_features import resampled_teams
-sns.set(rc={'figure.figsize':(11, 4)})
+from src.features.build_features import resampled_teams
+sns.set(rc={'figure.figsize': (11, 4)})
 
 
 def plot_ts(data, title):
@@ -18,19 +18,21 @@ def plot_ts(data, title):
         marker='o',
         label=title
     )
-    ax.set(ylim=(0,1.3))
-    plt.title(question)
+    ax.set(ylim=(0, 1.3))
+    # plt.title(question)
 
 
-def plot_divergence(processed, scoring_method, resampling_period):
-    kiwi, kiwi_KL, mango, mango_KL = resampled_teams(processed)
+def plot_divergence(processed, scoring_method, resampling_period, question):
+    kiwi, kiwi_KL, mango, mango_KL = resampled_teams(processed,
+                                                     resampling_period)
     fig = go.Figure()
     fig.add_trace(go.Scatter(
                     x=kiwi.index,
                     y=kiwi[scoring_method],
                     name="Kiwis",
                     mode="markers",
-                    text=[f"KL divergence in {resampling_period}: {KL}" for KL in kiwi_KL],
+                    text=[f"KL divergence in {resampling_period}: {KL}"
+                          for KL in kiwi_KL],
                     line_color='deepskyblue',
                     marker=dict(
                         size=np.nan_to_num(kiwi_KL),
@@ -46,7 +48,8 @@ def plot_divergence(processed, scoring_method, resampling_period):
                     name="Mangoes",
                     mode="markers",
                     # text=[f"Number of forecasts in {resampling_period}: {count}" for count in mango_marker_size],
-                    text=[f"KL divergence in {resampling_period}: {KL}" for KL in mango_KL],
+                    text=[f"KL divergence in {resampling_period}: {KL}"
+                          for KL in mango_KL],
                     line_color='dimgray',
                     marker=dict(
                         # size=mango_marker_size,
