@@ -15,6 +15,7 @@ def KL_divergence(df):
 
 
 def resample_KL(df):
+    print("DF", df)
     mu_b = df.groupby(
         ['Question', 'Ordered.Bin.Number']
     ).Forecast.mean().reset_index().rename(
@@ -31,13 +32,11 @@ def resample_KL(df):
         ).apply(KL_divergence).mean()
 
 
-def resampled_teams(processed, resampling_period):
+def resampled_teams(processed, resampling_period, question):
+    print(processed.query("Question == @question & TeamName == 'Kiwi'").resample(resampling_period).apply(lambda x: x.columns))
     kiwi = processed.query(
         "Question == @question & TeamName == 'Kiwi'"
     ).resample(resampling_period).mean()
-    kiwi_marker_size = processed.query(
-        "Question == @question & TeamName == 'Kiwi'"
-    ).resample(resampling_period).count().Forecaster
     kiwi_KL = processed.query(
         "Question == @question & TeamName == 'Kiwi'"
     ).resample(resampling_period).apply(resample_KL).values
@@ -45,9 +44,6 @@ def resampled_teams(processed, resampling_period):
     mango = processed.query(
         "Question == @question & TeamName == 'Mango'"
     ).resample(resampling_period).mean()
-    mango_marker_size = processed.query(
-        "Question == @question & TeamName == 'Mango'"
-    ).resample(resampling_period).count().Forecaster
     mango_KL = processed.query(
         "Question == @question & TeamName == 'Mango'"
     ).resample(resampling_period).apply(resample_KL).values

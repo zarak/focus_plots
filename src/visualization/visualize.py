@@ -24,7 +24,8 @@ def plot_ts(data, title):
 
 def plot_divergence(processed, scoring_method, resampling_period, question):
     kiwi, kiwi_KL, mango, mango_KL = resampled_teams(processed,
-                                                     resampling_period)
+                                                     resampling_period,
+                                                     question)
     fig = go.Figure()
     fig.add_trace(go.Scatter(
                     x=kiwi.index,
@@ -98,6 +99,6 @@ def plot_divergence(processed, scoring_method, resampling_period, question):
 
     fig.update_layout(
         title_text=question,
-        legend= {'itemsizing': 'constant'},
+        legend={'itemsizing': 'constant'},
     )
     return fig

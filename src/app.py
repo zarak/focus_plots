@@ -1,13 +1,15 @@
-from src.features.build_features import handle_zeros, resampled_teams
+from src.features.build_features import handle_zeros
 from src.visualization.visualize import plot_divergence
+from src.data.make_dataset import preprocess
 from pathlib import Path
 import pandas as pd
 import streamlit as st
 
 
-FILE_NAME = 'cycle3.csv'
-PATH = Path('../data/processed')
-processed = pd.read_csv(PATH / FILE_NAME)
+FILE_NAME = 'uniform_date.csv'
+PATH = Path('../data/raw')
+cycle3 = pd.read_csv(PATH / FILE_NAME)
+processed = preprocess(cycle3)
 processed = handle_zeros(processed)
 
 st.title("Resampled Score By CFF")

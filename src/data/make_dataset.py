@@ -34,7 +34,7 @@ def main(input_filepath, output_filepath):
     logger.info('making final data set from raw data')
     cycle3 = pd.read_csv(Path(input_filepath) / FILE_NAME)
     cycle3 = preprocess(cycle3)
-    cycle3.to_csv(Path(output_filepath) / 'cycle3.csv', index=False)
+    cycle3.to_csv(Path(output_filepath) / 'cycle3.csv')
 
 
 if __name__ == '__main__':
