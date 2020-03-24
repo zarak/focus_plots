@@ -3,6 +3,7 @@ import numpy as np
 
 
 def handle_zeros(cycle3, C=0.005):
+    """Laplace smoothing to handle 0 probabilities"""
     cycle3.loc[:, 'Forecast'] = cycle3.Forecast.replace(0, C)
     sums = cycle3.groupby(
         ['Uniform Date Format', 'Question']
@@ -12,11 +13,21 @@ def handle_zeros(cycle3, C=0.005):
     return merged
 
 
-def kullback_leibler(forecasts, average):
+def kullback_leibler(forecasts: np.ndarray, average: np.ndarray) -> np.ndarray:
+    """
+    Kullback-Leibler divergence
+    Args:
+        forecasts: An m by n matrix where m is the number
+            of bins and n is the number of forecasters.
+        average: A 1 by m row vector of floats.
+    """
     return -average @ (np.log2(forecasts) - np.log2(average.T))
 
 
 def KL_apply(question):
+    """
+    Compute average KL-divergence of all forecasters in a given time interval
+    """
     if not question.empty:
         average_forecast = question.groupby(
             ['Ordered.Bin.Number']
@@ -32,6 +43,7 @@ def KL_apply(question):
 
 
 def resampled_teams(processed, resampling_period, question):
+    """Subset by team, time interval, and question"""
     kiwi = processed.query(
         "Question == @question & TeamName == 'Kiwi'"
     ).reset_index().groupby(
