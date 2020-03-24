@@ -8,47 +8,60 @@ def handle_zeros(cycle3):
     return cycle3
 
 
-def KL_divergence(df):
-    return np.sum(
-        df['Average.Forecast'] * np.log2(df['Average.Forecast'] /
-                                         df['Forecast']))
+def kullback_leibler(forecasts, average):
+    return -average @ (np.log2(forecasts) - np.log2(average.T))
 
 
-def resample_KL(df):
-    mu_b = df.groupby(
-        ['Question', 'Ordered.Bin.Number']
-    ).Forecast.mean().reset_index().rename(
-        columns={'Forecast': 'Average.Forecast'}
-    )
-    f_t_b = df.reset_index().groupby(
-        ['Uniform Date Format', 'Question', 'Ordered.Bin.Number']
-    ).apply(lambda x: x['Forecast']).reset_index()
-    if not f_t_b.empty:
-        merged = pd.merge(
-            mu_b, f_t_b, on=['Question', 'Ordered.Bin.Number'], how='right')
-        return merged.groupby(
-            ['Question', 'Ordered.Bin.Number']
-        ).apply(KL_divergence).mean()
+def KL_apply(question):
+    if not question.empty:
+        average_forecast = question.groupby(
+            ['Ordered.Bin.Number']
+        ).Forecast.mean().reset_index()
+        forecasts = question.pivot_table(
+            values='Forecast',
+            index='Ordered.Bin.Number',
+            columns='Forecaster.ID'
+        ).values
+        question_avg = average_forecast.Forecast.values.reshape(1, -1)
+        divergences = kullback_leibler(forecasts, question_avg)
+        return np.mean(divergences)
 
 
 def resampled_teams(processed, resampling_period, question):
     kiwi = processed.query(
         "Question == @question & TeamName == 'Kiwi'"
-    ).groupby(pd.Grouper(freq=resampling_period,
-                         label='right')).apply(resample_KL)
-    print(kiwi)
+    ).reset_index().groupby(
+        pd.Grouper(
+            freq=resampling_period,
+            label='right',
+            key='Uniform Date Format',
+        )).FairSkill.mean()
+
     kiwi_KL = processed.query(
         "Question == @question & TeamName == 'Kiwi'"
-    ).groupby(pd.Grouper(
-        freq=resampling_period, label='right')).apply(resample_KL).values
+    ).reset_index().groupby(
+        pd.Grouper(
+            freq=resampling_period,
+            label='right',
+            key='Uniform Date Format',
+        )).apply(KL_apply)
 
     mango = processed.query(
         "Question == @question & TeamName == 'Mango'"
-    ).groupby(pd.Grouper(freq=resampling_period,
-                         label='right')).apply(resample_KL)
+    ).reset_index().groupby(
+        pd.Grouper(
+            freq=resampling_period,
+            label='right',
+            key='Uniform Date Format',
+        )).FairSkill.mean()
+
     mango_KL = processed.query(
         "Question == @question & TeamName == 'Mango'"
-    ).groupby(pd.Grouper(freq=resampling_period,
-                         label='right')).apply(resample_KL).values
+    ).reset_index().groupby(
+        pd.Grouper(
+            freq=resampling_period,
+            label='right',
+            key='Uniform Date Format',
+        )).apply(KL_apply)
 
-    return kiwi, kiwi_KL, mango, mango_KL
+    return kiwi, kiwi_KL,  mango, mango_KL
