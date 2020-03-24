@@ -9,6 +9,13 @@ from dotenv import find_dotenv, load_dotenv
 FILE_NAME = 'uniform_date.csv'
 
 
+def take_last_forecast(df):
+    """Get the last forecast if multiple forecasts have the same timestamp"""
+    index_cols = ['Uniform Date Format', 'Question', 'Ordered.Bin.Number']
+    agg_dict = {col: 'last' for col in df.columns if col not in index_cols}
+    return df.groupby(index_cols, as_index=False).agg(agg_dict)
+
+
 def preprocess(cycle3):
     cycle3 = cycle3.drop(columns={'Unnamed: 0', 'Timestamp'})
     cycle3 = cycle3.rename(columns={'Team.Name': 'TeamName'})
@@ -18,6 +25,7 @@ def preprocess(cycle3):
                ] = pd.to_datetime(cycle3['Uniform Date Format'])
     cycle3 = cycle3.query('FairSkill != "######"')
     cycle3.loc[:, 'FairSkill'] = cycle3.FairSkill.astype(float)
+    cycle3 = take_last_forecast(cycle3)
     cycle3 = cycle3.set_index("Uniform Date Format")
     cycle3 = cycle3.sort_index()
     return cycle3
