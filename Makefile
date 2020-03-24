@@ -5,9 +5,9 @@
 #################################################################################
 
 PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
-BUCKET = iarpa-focus/fair_skill
+BUCKET = iarpa-focus/focus_plots
 PROFILE = default
-PROJECT_NAME = fair_skill
+PROJECT_NAME = focus_plots
 PYTHON_INTERPRETER = python3
 
 ifeq (,$(shell which conda))
