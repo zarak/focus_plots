@@ -21,5 +21,10 @@ def test_handle_zeros():
 
 
 def test_kullback_leibler():
-    pass
+    forecasts = np.array(
+        [[0.1, 0.1],
+         [0.9, 0.9]]
+    )
+    average = np.array([[0.1, 0.9]])
+    assert (np.isclose(kullback_leibler(forecasts, average), 0)).all()
 
