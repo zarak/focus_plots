@@ -19,7 +19,7 @@ question = st.sidebar.selectbox(
 # for question in processed.Question.unique():
 resampling_period = st.sidebar.radio(
     "Resampling Period",
-    ['H (hourly)', 'D (daily)', 'B (business daily)'])
+    ['H (hourly)', 'D (daily)'])
 resampling_period = resampling_period.split(' ')[0]
 scoring_method = st.sidebar.radio(
     "Scoring Method",
