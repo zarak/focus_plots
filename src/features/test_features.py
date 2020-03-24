@@ -14,6 +14,7 @@ cycle3 = pd.read_csv(PATH / FILE_NAME)
 
 
 def test_handle_zeros():
+    """Probabilities should be between 0 and 1 inclusive"""
     processed = preprocess(cycle3)
     processed = handle_zeros(processed)
     forecasts = processed.Forecast
@@ -25,6 +26,7 @@ def test_handle_zeros():
 
 
 def test_kullback_leibler_no_divergence():
+    """Equal distributions should have 0 KL-divergence"""
     forecasts = np.array(
         [[0.1, 0.1],
          [0.9, 0.9]]
@@ -34,6 +36,7 @@ def test_kullback_leibler_no_divergence():
 
 
 def test_kullback_leibler_non_negative():
+    """KL-divergence should be nonnegative"""
     processed = preprocess(cycle3)
     processed = handle_zeros(processed)
     for question in processed.Question.unique():
