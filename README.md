@@ -1,6 +1,8 @@
 focus_plots
 ==============================
 
+Plots of forecasting metrics for the FOCUS program
+
 ### Setup instructions
 [Install Pipenv](https://pipenv.readthedocs.io/en/latest/)
 ```
@@ -8,9 +10,6 @@ git clone https://github.com/zarak/focus_plots.git
 cd focus_plots
 pipenv install
 ```
-
-
-Plots of forecasting metrics for the FOCUS program
 
 Project Organization
 ------------
