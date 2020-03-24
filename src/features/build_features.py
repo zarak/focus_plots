@@ -35,7 +35,7 @@ def resampled_teams(processed, resampling_period, question):
             freq=resampling_period,
             label='right',
             key='Uniform Date Format',
-        )).FairSkill.mean()
+        )).mean().reset_index()
 
     kiwi_KL = processed.query(
         "Question == @question & TeamName == 'Kiwi'"
@@ -53,7 +53,7 @@ def resampled_teams(processed, resampling_period, question):
             freq=resampling_period,
             label='right',
             key='Uniform Date Format',
-        )).FairSkill.mean()
+        )).mean().reset_index()
 
     mango_KL = processed.query(
         "Question == @question & TeamName == 'Mango'"
@@ -64,4 +64,4 @@ def resampled_teams(processed, resampling_period, question):
             key='Uniform Date Format',
         )).apply(KL_apply)
 
-    return kiwi, kiwi_KL,  mango, mango_KL
+    return kiwi, kiwi_KL, mango, mango_KL
