@@ -1,4 +1,8 @@
-from src.features.build_features import handle_zeros, kullback_leibler
+from src.features.build_features import (
+    handle_zeros,
+    kullback_leibler,
+    resampled_teams
+)
 from src.data.make_dataset import preprocess
 from pathlib import Path
 import pandas as pd
@@ -30,5 +34,13 @@ def test_kullback_leibler_no_divergence():
 
 
 def test_kullback_leibler_non_negative():
-    pass
+    processed = preprocess(cycle3)
+    processed = handle_zeros(processed)
+    for question in processed.Question.unique():
+        kiwi, kiwi_KL, mango, mango_KL = resampled_teams(processed,
+                                                         'D',
+                                                         question)
+        print(question)
+        assert all(kiwi_KL >= 0)
+
 
