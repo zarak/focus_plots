@@ -17,14 +17,18 @@ def test_handle_zeros():
         ['Uniform Date Format', 'Question']
     ).Forecast.sum().values
     assert all(np.logical_and(0 <= forecasts, forecasts <= 1))
-    assert all(grouped == 1)
+    assert all(np.isclose(grouped, 1))
 
 
-def test_kullback_leibler():
+def test_kullback_leibler_no_divergence():
     forecasts = np.array(
         [[0.1, 0.1],
          [0.9, 0.9]]
     )
     average = np.array([[0.1, 0.9]])
     assert (np.isclose(kullback_leibler(forecasts, average), 0)).all()
+
+
+def test_kullback_leibler_non_negative():
+    pass
 

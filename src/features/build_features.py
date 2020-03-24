@@ -5,7 +5,12 @@ import numpy as np
 def handle_zeros(cycle3):
     C = 0.005
     cycle3.loc[:, 'Forecast'] = cycle3.Forecast.replace(0, C)
-    return cycle3
+    sums = cycle3.groupby(
+        ['Uniform Date Format', 'Question']
+    ).Forecast.sum().reset_index().rename(columns={'Forecast': 'Total'})
+    merged = cycle3.merge(sums, on=['Question', 'Uniform Date Format'])
+    merged.loc[:, 'Forecast'] = merged.Forecast / merged.Total
+    return merged
 
 
 def kullback_leibler(forecasts, average):
