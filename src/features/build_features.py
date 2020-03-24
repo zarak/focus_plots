@@ -2,8 +2,7 @@ import pandas as pd
 import numpy as np
 
 
-def handle_zeros(cycle3):
-    C = 0.005
+def handle_zeros(cycle3, C=0.005):
     cycle3.loc[:, 'Forecast'] = cycle3.Forecast.replace(0, C)
     sums = cycle3.groupby(
         ['Uniform Date Format', 'Question']
