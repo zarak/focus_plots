@@ -41,6 +41,7 @@ def test_kullback_leibler_non_negative():
                                                          'D',
                                                          question)
         print(question)
+        kiwi_KL = kiwi_KL.dropna()
+        mango_KL = mango_KL.dropna()
         assert all(kiwi_KL >= 0)
-
-
+        assert all(mango_KL >= 0)
