@@ -1,7 +1,7 @@
 focus_plots
 ==============================
 
-Plots of forecasting metrics for the FOCUS program
+Plots of forecasting metrics for the FOCUS program.
 
 ### Setup instructions
 [Install Pipenv](https://pipenv.readthedocs.io/en/latest/)
